@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"coalesced-inifier/gow2"
+	"coalesced-inifier/web"
 	"fmt"
 	"github.com/alexflint/go-arg"
 	"os"
@@ -21,7 +22,13 @@ type UnpackCommand struct {
 	Output string `arg:"-o,--output,required" placeholder:"<ini folder>" help:"The path containing your INI files"`
 	Game   string `arg:"-g,--game,required" help:"game to unpack data from, one of: gow2, lollipop"`
 }
+
+type WebCommand struct {
+	Port int16 `arg:"-p,--port" default:"8080" help:"The port to listen on"`
+}
+
 type args struct {
+	WebCommand    *WebCommand    `arg:"subcommand:web" help:"Start web server"`
 	PackCommand   *PackCommand   `arg:"subcommand:pack" help:"Pack a folder containing INI files to a coalesced bin file"`
 	UnpackCommand *UnpackCommand `arg:"subcommand:unpack" help:"Unpack a coalesced bin file to a folder containing INI files to"`
 }
@@ -41,8 +48,10 @@ func main() {
 	var err error
 	if args.PackCommand != nil {
 		err = pack(args.PackCommand)
-	} else {
+	} else if args.UnpackCommand != nil {
 		err = unpack(args.UnpackCommand)
+	} else if args.WebCommand != nil {
+		err = web.Hook(args.WebCommand.Port)
 	}
 
 	if err != nil {

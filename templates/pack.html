@@ -1,0 +1,24 @@
+{{define "body"}}
+<h1 class="mt-5">Pack a ZIP containing INI files</h1>
+<p class="lead">Upload a ZIP with your INI files and get a coalesced version back.</p>
+
+<form action="/pack-handle" method="post" enctype="multipart/form-data">
+<!--    <div class="mb-3">-->
+<!--        <label for="game" class="form-label">Choose a supported game</label>-->
+<!---->
+<!--        <select class="form-select form-select-sm" id="game" name="game" aria-label="Small select example">-->
+<!--            <option value="gow2">Gears of War 2</option>-->
+<!--            <option value="thief">Thief 2014</option>-->
+<!--            <option value="lollipop">Lollipop Chainsaw</option>-->
+<!--        </select>-->
+<!--    </div>-->
+
+    <div class="mb-3">
+        <label for="file" class="form-label">Locate your zipped INIs</label>
+        <input class="form-control form-control-sm" type="file" name="file" id="file">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Upload</button>
+</form>
+
+{{end}}

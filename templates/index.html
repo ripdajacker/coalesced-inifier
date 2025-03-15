@@ -1,0 +1,19 @@
+{{define "body"}}
+<h1 class="mt-5">Coalesced INIs Web UI</h1>
+<p class="lead">Pack and unpack settings for select Unreal Engine 3 games on the Xbox 360.</p>
+
+<p>
+    This is the web version of the tool that gave birth to the <a href="https://archive.org/details/gears-of-war2-60fps-mod">Gears of War 2 60 FPS mod.</a>
+</p>
+
+<p>
+    Xbox 360 titles using the Unreal Engine 3 (UE3) store their game and graphics settings in a binary encoded format typically in a file called <code>Coalesced_int.bin</code>.
+    This file contains a lot of ordinary INI files and due to the binary encoding it is cumbersome to modify.
+    This tool helps you decode and encode the files to and from a collection of INI files.
+</p>
+
+<p>
+    To get started click <a href="/unpack">Unpack</a> and have your INI files served. <br>
+    When you have made your modifications, pack them up in a zip and use the <a href="/pack">Pack</a> function to get your <code>Coalesced_int.bin</code> file.
+</p>
+{{end}}
