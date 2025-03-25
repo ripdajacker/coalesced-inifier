@@ -1,0 +1,69 @@
+{{define "body"}}
+<h1 class="mt-5">Coalesced INIs Web UI</h1>
+<p class="lead">Pack and unpack settings for select Unreal Engine 3 games on the Xbox 360.</p>
+
+<p>
+    This is the web version of the tool that gave birth to the <a
+        href="https://archive.org/details/gears-of-war2-60fps-mod">Gears of War 2 60 FPS mod.</a>
+</p>
+
+<h4>TLDR</h4>
+<p>
+    To get started click <a href="/unpack">Unpack</a> and upload the <code>Coalesced_int.bin</code> file and it will
+    create a zip file with all the INIs. <br>
+
+    When you have made your modifications, pack them up in a zip and use the <a href="/pack">Pack</a> function to get
+    your <code>Coalesced_int.bin</code> file.
+</p>
+
+<h4>The long version</h4>
+
+<p>
+
+    Xbox 360 titles using the Unreal Engine 3 (UE3) store their game and graphics settings in a binary encoded format
+    typically in a file called <code>Coalesced_int.bin</code>.
+    This file contains a lot of ordinary INI files and due to the binary encoding it is cumbersome to modify.
+    This tool helps you decode and encode the files to and from a collection of INI files.
+</p>
+
+<p>
+    To <b>modify the settings</b>:
+
+<ol>
+    <li><a href="/unpack">Unpack</a> the binary settings into plain old INI files</li>
+    <li>Extract the zip into a folder</li>
+    <li>Modify whatever settings you want</li>
+    <li>Create a zip with the contents of the folder (<i>You must include metadata.json</i>)</li>
+    <li>Use the <a href="/pack">Pack</a> function to create your new <code>Coalesced_int.bin</code> file</li>
+    <li>Upload the modified file to your console, remember to update <code>Xbox360TOC.txt</code></li>
+</ol>
+
+
+<h4>Xbox360TOC.txt updates</h4>
+
+<p>This file is a table of contents file used by the different games to check for disk corruption.</p>
+<p>Different games require you to update different information in this file:
+
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Game</th>
+        <th>What needs updating</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>Gears of War 2</td>
+        <td>File size in bytes and MD5 hash</td>
+    </tr>
+    <tr>
+        <td>DMC: Devil May Cry</td>
+        <td>File size in bytes</td>
+    </tr>
+    </tbody>
+</table>
+
+<p>Once you have updated this, upload it to the console and test out your settings.</p>
+
+{{end}}
