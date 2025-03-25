@@ -99,7 +99,7 @@ func unpack(cmd *UnpackCommand) error {
 
 	fmt.Printf("Unpacking '%s' to '%s' using prefix '%s'\n\n", cmd.Input, cmd.Output, prefix)
 	reader := bytes.NewReader(data)
-	return gow2.Unpack(reader, cmd.Output, prefix)
+	return gow2.Unpack(reader, cmd.Output)
 }
 
 func parseGamePrefix(game string) string {

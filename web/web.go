@@ -6,6 +6,8 @@ import (
 	"coalesced-inifier/gow2"
 	"crypto/md5"
 	"encoding/hex"
+	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/google/uuid"
 	"html/template"
@@ -78,16 +80,32 @@ func packAction(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Error reading uploaded file", http.StatusInternalServerError)
 	}
 
+	metadataJsonFile := filepath.Join(outputPath, "metadata.json")
+	if _, err := os.Stat(metadataJsonFile); errors.Is(err, os.ErrNotExist) {
+		http.Error(w, "Error reading uploaded file, no metadata.json", http.StatusInternalServerError)
+	}
+
+	metadataJson, err := os.ReadFile(metadataJsonFile)
+	if err != nil {
+		http.Error(w, "Error reading uploaded file", http.StatusInternalServerError)
+	}
+
+	var metadata gow2.Metadata
+	err = json.Unmarshal(metadataJson, &metadata)
+	if err != nil {
+		http.Error(w, "Error reading metadata.json", http.StatusInternalServerError)
+	}
+
 	fileList := make([]string, 0)
 	err = recursiveFileList(outputPath, &fileList)
 	if err != nil {
 		http.Error(w, "Error reading uploaded file", http.StatusInternalServerError)
 	}
 
-	coalesced, err := gow2.Pack(fileList, outputPath, "..\\")
+	coalesced, err := gow2.Pack(fileList, outputPath, metadata.Prefix)
 
 	buffer := new(bytes.Buffer)
-	err = zipCoalesced(coalesced, buffer)
+	err = zipCoalesced(coalesced, buffer, metadata.Prefix)
 	if err != nil {
 		http.Error(w, "Error reading uploaded file", http.StatusInternalServerError)
 	}
@@ -151,7 +169,7 @@ func unpackAction(w http.ResponseWriter, r *http.Request) {
 
 	// TODO parse game prefix from form
 	// TODO sanitize paths
-	err = gow2.Unpack(bytes.NewReader(buf[:n]), outputPath, "..\\")
+	err = gow2.Unpack(bytes.NewReader(buf[:n]), outputPath)
 	if err != nil {
 		http.Error(w, "Error reading uploaded file", http.StatusInternalServerError)
 	}
@@ -182,7 +200,7 @@ func Hook(port int16) error {
 	return http.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", port), nil)
 }
 
-func zipCoalesced(coalesced *bytes.Buffer, buffer *bytes.Buffer) error {
+func zipCoalesced(coalesced *bytes.Buffer, buffer *bytes.Buffer, prefix string) error {
 	zipWriter := zip.NewWriter(buffer)
 	defer zipWriter.Close()
 
@@ -204,7 +222,8 @@ func zipCoalesced(coalesced *bytes.Buffer, buffer *bytes.Buffer) error {
 	}
 
 	fmt.Fprintf(writer, "File length: %d\n", len(coalesced.Bytes()))
-	fmt.Fprintf(writer, "File hash: %s\n\n", hex.EncodeToString(hash[:]))
+	fmt.Fprintf(writer, "File hash: %s\n", hex.EncodeToString(hash[:]))
+	fmt.Fprintf(writer, "File prefix: '%s'\n\n", prefix)
 
 	return err
 }
@@ -285,7 +304,7 @@ func unzip(r *zip.Reader, destDir string) error {
 	for _, f := range r.File {
 		// Check for path manipulation (zipslip)
 		destPath := filepath.Join(destDirAbs, f.Name)
-		if !strings.HasPrefix(destPath, destDirAbs+string(os.PathSeparator)) {
+		if !strings.HasPrefix(destPath+string(os.PathSeparator), destDirAbs) {
 			return fmt.Errorf("zip slip detected: %s", f.Name)
 		}
 
