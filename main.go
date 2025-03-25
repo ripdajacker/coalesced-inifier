@@ -20,7 +20,6 @@ type PackCommand struct {
 type UnpackCommand struct {
 	Input  string `arg:"-i,--input,required" placeholder:"<coalesced bin>" help:"The coalesced bin file such as Coalesced_int.bin"`
 	Output string `arg:"-o,--output,required" placeholder:"<ini folder>" help:"The path containing your INI files"`
-	Game   string `arg:"-g,--game,required" help:"game to unpack data from, one of: gow2, lollipop"`
 }
 
 type WebCommand struct {
@@ -90,14 +89,13 @@ func pack(cmd *PackCommand) error {
 }
 
 func unpack(cmd *UnpackCommand) error {
-	prefix := parseGamePrefix(cmd.Game)
 	data, err := os.ReadFile(cmd.Input)
 
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Printf("Unpacking '%s' to '%s' using prefix '%s'\n\n", cmd.Input, cmd.Output, prefix)
+	fmt.Printf("Unpacking '%s' to '%s'\n\n", cmd.Input, cmd.Output)
 	reader := bytes.NewReader(data)
 	return gow2.Unpack(reader, cmd.Output)
 }
