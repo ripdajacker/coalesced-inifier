@@ -11,15 +11,30 @@ It has been tested to read and write the files of the following games:
 
 - Gears of War 2
 - Lollipop Chainsaw
+- Thief
+- DMC: Devil May Cry
 
 You may need a modified XEX depending on the game.
+
+## Web UI
+
+The application includes a web UI:
+
+```shell
+./coalesced-inifier web
+```
+
+You can now access it on (http://localhost:8080)[http://localhost:8080].
+
+Alternatively go to: (https://coalesced.getscab.net)[https://coalesced.getscab.net] for a hosted version that may
+or may not be up-to-date.
 
 ## Example:  Unpacking the INI files
 
 To unpack the ini files from a gow2 coalesced file, run the following:
 
 ```shell
-./coalesced-inifier unpack -i /path/to/Coalesced_int.bin -o  my-output-dir -g gow2
+./coalesced-inifier unpack -i /path/to/Coalesced_int.bin -o  my-output-dir
 ```
 
 You now should have a folder structure containing the INI files:
@@ -59,14 +74,13 @@ You can now update the `Xbox360TOC.txt` with the hash and length.
 ```text
 Coalesced Inifier
 0.1.0
-Usage: coalesced-inifier unpack --input <coalesced bin> --output <ini folder> --game GAME
+Usage: coalesced-inifier unpack --input <coalesced bin> --output <ini folder>
 
 Options:
   --input <coalesced bin>, -i <coalesced bin>
                          The coalesced bin file such as Coalesced_int.bin
   --output <ini folder>, -o <ini folder>
                          The path containing your INI files
-  --game GAME, -g GAME   game to unpack data from, one of: gow2, lollipop
   --help, -h             display this help and exit
   --version              display version and exit
 ```
