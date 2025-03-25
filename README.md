@@ -24,9 +24,9 @@ The application includes a web UI:
 ./coalesced-inifier web
 ```
 
-You can now access it on (http://localhost:8080)[http://localhost:8080].
+You can now access it on [http://localhost:8080](http://localhost:8080).
 
-Alternatively go to: (https://coalesced.getscab.net)[https://coalesced.getscab.net] for a hosted version that may
+Alternatively go to: [https://coalesced.getscab.net](https://coalesced.getscab.net) for a hosted version that may
 or may not be up-to-date.
 
 ## Example:  Unpacking the INI files
