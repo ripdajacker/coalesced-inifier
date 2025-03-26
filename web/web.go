@@ -23,7 +23,8 @@ func mainView(w http.ResponseWriter, r *http.Request) {
 	tmpl := make(map[string]*template.Template)
 	tmpl["index.html"] = template.Must(template.ParseFiles("templates/index.html", "templates/boilerplate.html"))
 
-	err := tmpl["index.html"].ExecuteTemplate(w, "base", nil)
+	info := PageInfo{SelectedTab: "home"}
+	err := tmpl["index.html"].ExecuteTemplate(w, "base", info)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
@@ -33,7 +34,8 @@ func packView(w http.ResponseWriter, r *http.Request) {
 	tmpl := make(map[string]*template.Template)
 	tmpl["pack.html"] = template.Must(template.ParseFiles("templates/pack.html", "templates/boilerplate.html"))
 
-	err := tmpl["pack.html"].ExecuteTemplate(w, "base", nil)
+	info := PageInfo{SelectedTab: "pack"}
+	err := tmpl["pack.html"].ExecuteTemplate(w, "base", info)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
@@ -124,7 +126,8 @@ func unpackView(w http.ResponseWriter, r *http.Request) {
 	tmpl := make(map[string]*template.Template)
 	tmpl["unpack.html"] = template.Must(template.ParseFiles("templates/unpack.html", "templates/boilerplate.html"))
 
-	err := tmpl["unpack.html"].ExecuteTemplate(w, "base", nil)
+	info := PageInfo{SelectedTab: "unpack"}
+	err := tmpl["unpack.html"].ExecuteTemplate(w, "base", info)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
@@ -399,4 +402,8 @@ func recursiveFileList(current string, inputFiles *[]string) error {
 func isIniOrInt(file string) bool {
 	file = strings.ToLower(file)
 	return strings.HasSuffix(file, ".int") || strings.HasSuffix(file, ".ini")
+}
+
+type PageInfo struct {
+	SelectedTab string
 }
